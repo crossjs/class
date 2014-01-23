@@ -3,7 +3,7 @@ node_js:
   - 0.10
 
 before_script:
-  - npm install -g grunt-cli
+  - sudo npm install -g grunt-cli
   - grunt --version
   - npm install grunt --save-dev
 
