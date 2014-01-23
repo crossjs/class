@@ -4,8 +4,9 @@ node_js:
 
 install:
   - npm install -g grunt-cli
-  - grunt --version
   - npm install --save-dev
+  - npm install -g spm
+  - spm install --save
 
 script:
   - grunt qunit
