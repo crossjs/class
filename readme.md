@@ -1,0 +1,3 @@
+#class
+
+ > seajs module

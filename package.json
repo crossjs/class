@@ -1,0 +1,49 @@
+{
+  "name": "class",
+  "version": "0.0.1",
+  "description": "oo class, width event and extend",
+  "keywords": [ "class", "seajs", "modules" ],
+  "homepage": "https://github.com/crossjs/class",
+  "bugs": {
+    "url": "https://github.com/crossjs/class/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/crossjs/class/blob/master/LICENSE-MIT"
+    }
+  ],
+  "author": {
+    "name": "crossjs",
+    "url": "https://github.com/crossjs"
+  },
+  "main": "Gruntfile.js",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/crossjs/class.git"
+  },
+  "engines": {
+    "node": ">= 0.8.0"
+  },
+  "dependencies": {
+  },
+  "devDependencies": {
+    "grunt": "*",
+    "grunt-contrib-clean": "*",
+    "grunt-contrib-copy": "*",
+    "grunt-contrib-jshint": "*",
+    "grunt-contrib-qunit": "*",
+    "grunt-contrib-uglify": "*",
+    "grunt-contrib-yuidoc": "*",
+    "grunt-cmd-transport": "*",
+    "matchdep": "*"
+  },
+  "family": "crossjs",
+  "spm": {
+    "output": [ "super.js", "class.js", "singleton.js" ],
+    "alias": {
+      "$": "../vendor/jquery/jquery",
+      "util": "crossjs/util/0.0.1/util"
+    }
+  }
+}
