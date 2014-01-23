@@ -2,10 +2,10 @@ language: node_js
 node_js:
   - 0.10
 
-before_script:
-  - sudo npm install -g grunt-cli
+install:
+  - npm install -g grunt-cli
   - grunt --version
-  - npm install grunt --save-dev
+  - npm install --save-dev
 
 script:
   - grunt qunit
