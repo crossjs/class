@@ -7,36 +7,54 @@ define(function (require, exports) {
   QUnit.start();
 
   module('Module Singleton');
-  test('new Singleton()', function() {
-    var S = new Singleton();
-    equal( new S(), new S(), '' );
+  test('new SingletonA()', function() {
+    var SingletonA = new Singleton();
+    equal( new SingletonA(), new SingletonA(), '' );
+  });
+
+  module('Module Construct');
+  test('new SingletonA(arguments)', function() {
+    var SingletonA = new Singleton({
+      __construct: function (x) {
+        this.x = x;
+      }
+    });
+    equal( new SingletonA(2).x, 2, '' );
   });
 
   module('Module Inherit');
   test('new Singleton(SingletonA)', function() {
-  var S1 = new Singleton({
-      x: 1
-    }),
-    S2 = new Singleton(S1),
-    s1 = new S1(),
-    s2 = new S2();
-    equal( s1.x, s2.x, '' );
-    equal( s2.x, 1, '' );
+    var SingletonA = new Singleton({
+        x: 1,
+        y: 2
+      }),
+      SingletonB = new Singleton(SingletonA, {
+        x: 3,
+        z: 4
+      }),
+      instanceA = new SingletonA(),
+      instanceB = new SingletonB();
+    equal( instanceA.x, 1, '' );
+    equal( instanceB.x, 3, '' );
+    equal( instanceA.y, instanceB.y, '' );
+    equal( instanceB.y, 2, '' );
+    equal( instanceA.z, undefined, '' );
+    equal( instanceB.z, 4, '' );
   });
 
   module('Module Extend');
   test('.extend(PlainObjectA, ..., PlainObjectN)', function() {
-    var S = new Singleton(),
-      s = new S();
-    s.extend({ x: 1, y: 2 }, { x: 3 });
-    equal( s.x, 3, '' );
-    equal( s.y, 2, '' );
+    var SingletonA = new Singleton(),
+      instanceA = new SingletonA();
+    instanceA.extend({ x: 1, y: 2 }, { x: 3 });
+    equal( instanceA.x, 3, '' );
+    equal( instanceA.y, 2, '' );
   });
 
   module('Module Event');
   test('.fire(event)', function() {
-    var S = new Singleton(),
-      s = new S({
+    var SingletonA = new Singleton(),
+      instanceA = new SingletonA({
         on: {
           'test': function () {
             T = this;
@@ -46,9 +64,23 @@ define(function (require, exports) {
       }),
       T = '',
       t = '';
-    s.fire('test', 1, 2, 3);
-    equal( T, s, '' );
+    instanceA.fire('test', 1, 2, 3);
+    equal( T, instanceA, '' );
     equal( t, 'test123', '' );
+  });
+
+  module('Module Plugins');
+  test('SingletonA.addPlugins(plugins)', function() {
+    var SingletonA = new Singleton(),
+      instanceA;
+    SingletonA.addPlugins({
+        'test': function () {
+          this.plugined = true;
+        }
+      });
+    instanceA = new SingletonA();
+    equal( instanceA.plugined, true, '' );
+    equal( instanceA.another, undefined, '' );
   });
 
 });

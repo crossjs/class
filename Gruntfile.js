@@ -56,6 +56,11 @@ module.exports = function(grunt) {
         files: {
           src: ['dist/**']
         }
+      },
+      build: {
+        files: {
+          src: ['.build']
+        }
       }
     },
 
@@ -75,6 +80,23 @@ module.exports = function(grunt) {
         files: [{
           expand: true,
           cwd: 'src/',
+          src: ['*.js'],
+          dest: '.build/',
+          ext: '.js'
+        }]
+      }
+    },
+
+    concat: {
+      options: {
+        debug: true,
+        include: 'self',
+        paths: ['']
+      },
+      src: {
+        files: [{
+          expand: true,
+          cwd: '.build/',
           src: ['*.js'],
           dest: 'dist/',
           ext: '.js'
@@ -109,7 +131,7 @@ module.exports = function(grunt) {
 
   });
 
-  grunt.registerTask('build', ['clean:dist', 'transport', 'uglify']);
+  grunt.registerTask('build', ['clean:dist', 'transport', 'concat', 'clean:build', 'uglify']);
 
   grunt.registerTask('doc', ['yuidoc', 'clean:pages', 'copy', 'clean:doc']);
 

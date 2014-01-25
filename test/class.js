@@ -7,36 +7,54 @@ define(function (require, exports) {
   QUnit.start();
 
   module('Module Class');
-  test('new Class()', function() {
-    var C = new Class({});
-    notEqual( new C(), new C(), '' );
+  test('new ClassA()', function() {
+    var ClassA = new Class();
+    notEqual( new ClassA(), new ClassA(), '' );
+  });
+
+  module('Module Construct');
+  test('new ClassA(arguments)', function() {
+    var ClassA = new Class({
+      __construct: function (x) {
+        this.x = x;
+      }
+    });
+    equal( new ClassA(2).x, 2, '' );
   });
 
   module('Module Inherit');
   test('new Class(ClassA)', function() {
-    var C1 = new Class({
-        x: 1
+    var ClassA = new Class({
+        x: 1,
+        y: 2
       }),
-      C2 = new Class(C1),
-      c1 = new C1(),
-      c2 = new C2();
-    equal( c1.x, c2.x, '' );
-    equal( c2.x, 1, '' );
+      ClassB = new Class(ClassA, {
+        x: 3,
+        z: 4
+      }),
+      instanceA = new ClassA(),
+      instanceB = new ClassB();
+    equal( instanceA.x, 1, '' );
+    equal( instanceB.x, 3, '' );
+    equal( instanceA.y, instanceB.y, '' );
+    equal( instanceB.y, 2, '' );
+    equal( instanceA.z, undefined, '' );
+    equal( instanceB.z, 4, '' );
   });
 
   module('Module Extend');
   test('.extend(PlainObjectA, ..., PlainObjectN)', function() {
-    var C = new Class(),
-      c = new C();
-    c.extend({ x: 1, y: 2 }, { x: 3 });
-    equal( c.x, 3, '' );
-    equal( c.y, 2, '' );
+    var ClassA = new Class(),
+      instanceA = new ClassA();
+    instanceA.extend({ x: 1, y: 2 }, { x: 3 });
+    equal( instanceA.x, 3, '' );
+    equal( instanceA.y, 2, '' );
   });
 
   module('Module Event');
   test('.fire(event)', function() {
-    var C = new Class(),
-      c = new C({
+    var ClassA = new Class(),
+      instanceA = new ClassA({
         on: {
           'test': function () {
             T = this;
@@ -46,9 +64,23 @@ define(function (require, exports) {
       }),
       T = '',
       t = '';
-    c.fire('test', 1, 2, 3);
-    equal( T, c, '' );
+    instanceA.fire('test', 1, 2, 3);
+    equal( T, instanceA, '' );
     equal( t, 'test123', '' );
+  });
+
+  module('Module Plugins');
+  test('ClassA.addPlugins(plugins)', function() {
+    var ClassA = new Class(),
+      instanceA;
+    ClassA.addPlugins({
+        'test': function () {
+          this.plugined = true;
+        }
+      });
+    instanceA = new ClassA();
+    equal( instanceA.plugined, true, '' );
+    equal( instanceA.another, undefined, '' );
   });
 
 });

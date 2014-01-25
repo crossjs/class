@@ -25,7 +25,10 @@ var Singleton = function (/*[Brood][, Proto]*/) {
   var args = arguments,
     Dummy,
     Proto,
-    Brood;
+    Brood,
+
+    classInstance,
+    classPlugins = {};
 
   switch (args.length) {
     case 2:
@@ -51,9 +54,11 @@ var Singleton = function (/*[Brood][, Proto]*/) {
   }
 
   Dummy = function () {
-    if (this.constructor.__instance) {
-      return this.constructor.__instance;
+    if (classInstance) {
+      return classInstance;
     }
+
+    classInstance = this;
 
     var args = Array.prototype.slice.call(arguments, 0),
 
@@ -67,34 +72,31 @@ var Singleton = function (/*[Brood][, Proto]*/) {
 
     // call parents' __construct
     // `Child's uber linked to Parent's prototype`
-    callparent(this, this.constructor.uber, '__construct');
+    callparent(this, Dummy.uber, '__construct');
 
     // call __construct
-    (function (ctx, obj, prop) {
-      if (obj.hasOwnProperty(prop)) {
-        obj[prop].apply(ctx, args);
-      }
-    })(this, this.constructor.prototype, '__construct');
+    if (typeof this.__construct === 'function') {
+      this.__construct.apply(this, args);
+    }
 
     // load __plugins
-    (function (ctx, obj, prop) {
-      if (obj.hasOwnProperty(prop)) {
-        $.each(obj[prop], function (n, func) {
-          func.apply(ctx, args);
-        });
-      }
-    })(this, this.constructor, '__plugins');
+    $.each(classPlugins, $.proxy(function (n, func) {
+      func.apply(this, args);
+    }, this));
 
     // notify constructed, for plugins
     // this.fire('load');
-
-    this.constructor.__instance = this;
   };
 
-  // plugins
-  Dummy.__plugins = (Brood && Brood.__plugins) ? Brood.__plugins : {};
-  Dummy.plugins = function (plugins) {
-    $.extend(Dummy.__plugins, plugins);
+  /**
+   * 为当前类添加插件
+   * @method addPlugins
+   * @static
+   * @param  {Object} plugins 插件
+   * @return {Function} 当前类
+   */
+  Dummy.addPlugins = function (plugins) {
+    $.extend(classPlugins, plugins);
     return Dummy;
   };
 

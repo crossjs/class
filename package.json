@@ -1,6 +1,6 @@
 {
   "name": "class",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "oo class, width event and extend",
   "keywords": [ "class", "seajs", "modules" ],
   "homepage": "https://github.com/crossjs/class",
@@ -39,13 +39,14 @@
     "grunt-contrib-uglify": "*",
     "grunt-contrib-yuidoc": "*",
     "grunt-cmd-transport": "*",
+    "grunt-cmd-concat": "*",
     "matchdep": "*"
   },
   "family": "crossjs",
   "spm": {
-    "output": [ "super.js", "class.js", "singleton.js" ],
+    "output": [ "class.js", "singleton.js", "super.js" ],
     "alias": {
-      "$": "../vendor/jquery/jquery",
+      "$": "crossjs/jquery/1.11.0/jquery",
       "util": "crossjs/util/0.0.1/util"
     }
   }

@@ -18,10 +18,13 @@
     <script>
         QUnit.config.autostart = false;
         seajs.config({
-            "base": '../sea-modules/',
-            "alias": {
-              "$": "../vendor/jquery/jquery",
-              "util": "crossjs/util/0.0.1/util"
+            'base': '../sea-modules/',
+            'map': [
+                ['/sea-modules/crossjs/jquery/1.11.0/', '/vendor/jquery/']
+            ],
+            'alias': {
+              '$': 'crossjs/jquery/1.11.0/jquery',
+              'util': 'crossjs/util/0.0.1/util'
             }
         });
         seajs.use(['./class.js']);

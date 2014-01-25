@@ -17,7 +17,8 @@ var $ = require('$'),
  * @constructor
  */
 var Super = function () {},
-  Dummy = function () {};
+  // Bridge for inherit
+  Bridge = function () {};
 
 Super.uber = Super.prototype = {
 
@@ -130,8 +131,9 @@ Super.uber = Super.prototype = {
  * @static
  */
 Super.inherit = function (Child, Parent) {
-  Dummy.prototype = Parent.prototype;
-  Child.prototype = new Dummy();
+  // 不能使用`new Parent()`，因为可能引入非原型方法/属性
+  Bridge.prototype = Parent.prototype;
+  Child.prototype = new Bridge();
   Child.uber = Parent.prototype;
   Child.prototype.constructor = Child;
 };
