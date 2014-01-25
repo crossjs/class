@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>src/super.js - class</title>
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="../assets/vendor/prettify/prettify.css">
+  <link rel="stylesheet" href="../assets/css/yuidoc-bootstrap.css">
+  <link rel="shortcut icon" type="image/png" href="../assets/favicon.png?v=1">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="../index.html">class</a>
+  </div>
+  <div class="collapse navbar-collapse" id="navbar-collapse">
+    <p class="navbar-text navbar-right">v0.0.2</p>
+  </div>
+</nav>
+
+<div class="container" id="main">
+  <div class="row">
+    <div class="col-md-3">
+    <div id="sidebar">
+  <ul id="main-nav" class="nav nav-tabs" style="margin-bottom:0;">
+    <li><a href="#classes" data-toggle="tab">Classes</a></li>
+    <li class="active"><a href="#modules" data-toggle="tab">Modules</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane" id="classes">
+      <ul id="api-classes" class="nav nav-list">
+        
+          <li><a href="../classes/Class.html">Class</a></li>
+        
+          <li><a href="../classes/Singleton.html">Singleton</a></li>
+        
+          <li><a href="../classes/Super.html">Super</a></li>
+        
+      </ul>
+    </div>
+
+    <div class="tab-pane active" id="modules">
+      <ul id="api-modules" class="nav nav-list">
+        
+          <li><a href="../modules/Class.html">Class</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+    </div>
+    <div class="col-md-9">
+      <form id="options-form" class="form-inline pull-right">
+  Show:
+  <label for="api-show-inherited" class="checkbox">
+    <input type="checkbox" id="api-show-inherited" checked="checked">
+    Inherited
+  </label>
+
+  <label for="api-show-protected" class="checkbox">
+    <input type="checkbox" id="api-show-protected" checked="checked">
+    Protected
+  </label>
+
+  <label for="api-show-private" class="checkbox">
+    <input type="checkbox" id="api-show-private" checked="checked">
+    Private
+  </label>
+  <label for="api-show-deprecated" class="checkbox">
+    <input type="checkbox" id="api-show-deprecated" checked="checked">
+    Deprecated
+  </label>
+
+</form>
+
+
+      <div class="apidocs">
+        <div id="docs-main">
+          <div class="content">
+            <div class="page-header">
+    <h1>src/super.js <small>File</small></h1>
+</div>
+
+<div class="file">
+    <pre class="prettyprint linenums">
+define(function (require, exports, module) {
+
+/**
+ * 类
+ * @module Class
+ */
+
+&#x27;use strict&#x27;;
+
+var $ = require(&#x27;$&#x27;),
+  Util = require(&#x27;util&#x27;);
+
+/**
+ * 超类
+ * 实现了事件订阅与类继承
+ * @class Super
+ * @constructor
+ */
+var Super = function () {},
+  // Bridge for inherit
+  Bridge = function () {};
+
+Super.uber = Super.prototype = {
+
+  _Super: Util.guid,
+
+  /**
+   * 构造函数
+   * @method __construct
+   */
+  __construct: function (options) {
+    this.__eventList = {};
+    // 增加订阅
+    if ($.isPlainObject(options) &amp;&amp; $.isPlainObject(options.on)) {
+      this.on(options.on);
+      // 删除数据，避免多次订阅
+      // options.on = null;
+    }
+  },
+
+  /**
+   * 绑定事件，暂不支持命名空间
+   * @method on
+   * @param {String} event 事件名
+   * @param {Function} callback 绑定回调函数
+   */
+  on: function (event, callback) {
+    var eventList = this.__eventList,
+      obj = {};
+    if ($.isPlainObject(event)) {
+      obj = event;
+    } else {
+      obj[event] = callback;
+    }
+    $.each(obj, function (event, callback) {
+      if (Object.prototype.hasOwnProperty.call(eventList, event) &amp;&amp; eventList[event]) {
+        // 判断唯一性，避免多次订阅
+        if ($.inArray(callback, eventList[event]) === -1) {
+          eventList[event].push(callback);
+        }
+      } else {
+        eventList[event] = [callback];
+      }
+    });
+    return this;
+  },
+
+  /**
+   * 解除绑定的事件
+   * @param {String} event 事件名
+   * @param {Function} callback 绑定回调函数
+   * @method off
+   */
+  off: function (event, callback) {
+    var eventList = this.__eventList;
+    if (Object.prototype.hasOwnProperty.call(eventList, event)) {
+      if (typeof callback === &#x27;function&#x27;) {
+        $.each(eventList[event], function (i, n) {
+          if (n === callback) {
+            eventList[event].splice(i, 1);
+          }
+        });
+      } else {
+        delete eventList[event];
+      }
+    }
+    return this;
+  },
+
+  /**
+   * 触发绑定的事件
+   * @param {String} event 事件名
+   * @method fire
+   */
+  fire: function (event) {
+    var eventList = this.__eventList,
+      args;
+    if (Object.prototype.hasOwnProperty.call(eventList, event)) {
+      args = [];
+      if (arguments.length &gt; 1) {
+        args = Array.prototype.slice.call(arguments, 1);
+      }
+      $.each(eventList[event], $.proxy(function (i, callback) {
+        callback.apply(this, args);
+      }, this));
+    }
+    return this;
+  },
+
+  /**
+   * 扩展实例方法，返回当前实例
+   * @param {Object} obj1 实例方法集
+   * @param {Object} [objN] 实例方法集
+   * @return {object}
+   * @method extend
+   */
+  extend: function (/*obj1[, objN]*/) {
+    var args = Array.prototype.slice.call(arguments, 0);
+    args.unshift(true, this);
+    $.extend.apply(null, args);
+    return this;
+  }
+
+};
+
+/**
+ * 类继承
+ * @param {Function} Child 子类
+ * @param {Function} Parent 父类
+ * @method Super.inherit
+ * @static
+ */
+Super.inherit = function (Child, Parent) {
+  // 不能使用&#x60;new Parent()&#x60;，因为可能引入非原型方法/属性
+  Bridge.prototype = Parent.prototype;
+  Child.prototype = new Bridge();
+  Child.uber = Parent.prototype;
+  Child.prototype.constructor = Child;
+};
+
+return Super;
+
+});
+
+    </pre>
+</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/vendor/jquery/jquery.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="../assets/vendor/prettify/prettify.js"></script>
+<script src="../assets/js/yuidoc-bootstrap.js"></script>
+</body>
+</html>

@@ -1,0 +1,300 @@
+{
+    "project": {
+        "name": "class",
+        "description": "oo class, width event and extend",
+        "version": "0.0.2"
+    },
+    "files": {
+        "src/class.js": {
+            "name": "src/class.js",
+            "modules": {
+                "Class": 1
+            },
+            "classes": {
+                "Class": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/singleton.js": {
+            "name": "src/singleton.js",
+            "modules": {},
+            "classes": {
+                "Singleton": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        },
+        "src/super.js": {
+            "name": "src/super.js",
+            "modules": {},
+            "classes": {
+                "Super": 1
+            },
+            "fors": {},
+            "namespaces": {}
+        }
+    },
+    "modules": {
+        "Class": {
+            "name": "Class",
+            "submodules": {},
+            "classes": {
+                "Class": 1,
+                "Singleton": 1,
+                "Super": 1
+            },
+            "fors": {},
+            "namespaces": {},
+            "tag": "module",
+            "file": "src/super.js",
+            "line": 13,
+            "description": "类"
+        }
+    },
+    "classes": {
+        "Class": {
+            "name": "Class",
+            "shortname": "Class",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Class",
+            "namespace": "",
+            "file": "src/class.js",
+            "line": 14,
+            "description": "标准类",
+            "extends": "Super",
+            "params": [
+                {
+                    "name": "Brood",
+                    "description": "将要继承的父类（只继承其原型方法）",
+                    "type": "Function",
+                    "optional": true
+                },
+                {
+                    "name": "Proto",
+                    "description": "将要扩展的实例方法集",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "is_constructor": 1
+        },
+        "Singleton": {
+            "name": "Singleton",
+            "shortname": "Singleton",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Class",
+            "namespace": "",
+            "file": "src/singleton.js",
+            "line": 14,
+            "description": "单例类",
+            "extends": "Super",
+            "params": [
+                {
+                    "name": "Brood",
+                    "description": "将要继承的父类（只继承其原型方法）",
+                    "type": "Function",
+                    "optional": true
+                },
+                {
+                    "name": "Proto",
+                    "description": "将要扩展的实例方法集",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Function"
+            },
+            "is_constructor": 1
+        },
+        "Super": {
+            "name": "Super",
+            "shortname": "Super",
+            "classitems": [],
+            "plugins": [],
+            "extensions": [],
+            "plugin_for": [],
+            "extension_for": [],
+            "module": "Class",
+            "namespace": "",
+            "file": "src/super.js",
+            "line": 13,
+            "description": "超类\n实现了事件订阅与类继承",
+            "is_constructor": 1
+        }
+    },
+    "classitems": [
+        {
+            "file": "src/class.js",
+            "line": 83,
+            "description": "为当前类添加插件",
+            "itemtype": "method",
+            "name": "addPlugins",
+            "static": 1,
+            "params": [
+                {
+                    "name": "plugins",
+                    "description": "插件",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "当前类",
+                "type": "Function"
+            },
+            "class": "Class",
+            "module": "Class"
+        },
+        {
+            "file": "src/singleton.js",
+            "line": 91,
+            "description": "为当前类添加插件",
+            "itemtype": "method",
+            "name": "addPlugins",
+            "static": 1,
+            "params": [
+                {
+                    "name": "plugins",
+                    "description": "插件",
+                    "type": "Object"
+                }
+            ],
+            "return": {
+                "description": "当前类",
+                "type": "Function"
+            },
+            "class": "Singleton",
+            "module": "Class"
+        },
+        {
+            "file": "src/super.js",
+            "line": 27,
+            "description": "构造函数",
+            "itemtype": "method",
+            "name": "__construct",
+            "class": "Super",
+            "module": "Class"
+        },
+        {
+            "file": "src/super.js",
+            "line": 41,
+            "description": "绑定事件，暂不支持命名空间",
+            "itemtype": "method",
+            "name": "on",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "事件名",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "绑定回调函数",
+                    "type": "Function"
+                }
+            ],
+            "class": "Super",
+            "module": "Class"
+        },
+        {
+            "file": "src/super.js",
+            "line": 68,
+            "description": "解除绑定的事件",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "事件名",
+                    "type": "String"
+                },
+                {
+                    "name": "callback",
+                    "description": "绑定回调函数",
+                    "type": "Function"
+                }
+            ],
+            "itemtype": "method",
+            "name": "off",
+            "class": "Super",
+            "module": "Class"
+        },
+        {
+            "file": "src/super.js",
+            "line": 90,
+            "description": "触发绑定的事件",
+            "params": [
+                {
+                    "name": "event",
+                    "description": "事件名",
+                    "type": "String"
+                }
+            ],
+            "itemtype": "method",
+            "name": "fire",
+            "class": "Super",
+            "module": "Class"
+        },
+        {
+            "file": "src/super.js",
+            "line": 110,
+            "description": "扩展实例方法，返回当前实例",
+            "params": [
+                {
+                    "name": "obj1",
+                    "description": "实例方法集",
+                    "type": "Object"
+                },
+                {
+                    "name": "objN",
+                    "description": "实例方法集",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "",
+                "type": "Object"
+            },
+            "itemtype": "method",
+            "name": "extend",
+            "class": "Super",
+            "module": "Class"
+        },
+        {
+            "file": "src/super.js",
+            "line": 126,
+            "description": "类继承",
+            "params": [
+                {
+                    "name": "Child",
+                    "description": "子类",
+                    "type": "Function"
+                },
+                {
+                    "name": "Parent",
+                    "description": "父类",
+                    "type": "Function"
+                }
+            ],
+            "itemtype": "method",
+            "name": "Super.inherit",
+            "static": 1,
+            "class": "Super",
+            "module": "Class"
+        }
+    ],
+    "warnings": []
+}

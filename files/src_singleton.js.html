@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>src/singleton.js - class</title>
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap.css">
+  <link rel="stylesheet" href="../assets/vendor/bootstrap/css/bootstrap-theme.css">
+  <link rel="stylesheet" href="../assets/vendor/prettify/prettify.css">
+  <link rel="stylesheet" href="../assets/css/yuidoc-bootstrap.css">
+  <link rel="shortcut icon" type="image/png" href="../assets/favicon.png?v=1">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-static-top" role="navigation">
+  <div class="navbar-header">
+    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#navbar-collapse">
+      <span class="sr-only">Toggle navigation</span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <a class="navbar-brand" href="../index.html">class</a>
+  </div>
+  <div class="collapse navbar-collapse" id="navbar-collapse">
+    <p class="navbar-text navbar-right">v0.0.2</p>
+  </div>
+</nav>
+
+<div class="container" id="main">
+  <div class="row">
+    <div class="col-md-3">
+    <div id="sidebar">
+  <ul id="main-nav" class="nav nav-tabs" style="margin-bottom:0;">
+    <li><a href="#classes" data-toggle="tab">Classes</a></li>
+    <li class="active"><a href="#modules" data-toggle="tab">Modules</a></li>
+  </ul>
+
+  <div class="tab-content">
+    <div class="tab-pane" id="classes">
+      <ul id="api-classes" class="nav nav-list">
+        
+          <li><a href="../classes/Class.html">Class</a></li>
+        
+          <li><a href="../classes/Singleton.html">Singleton</a></li>
+        
+          <li><a href="../classes/Super.html">Super</a></li>
+        
+      </ul>
+    </div>
+
+    <div class="tab-pane active" id="modules">
+      <ul id="api-modules" class="nav nav-list">
+        
+          <li><a href="../modules/Class.html">Class</a></li>
+        
+      </ul>
+    </div>
+  </div>
+</div>
+
+    </div>
+    <div class="col-md-9">
+      <form id="options-form" class="form-inline pull-right">
+  Show:
+  <label for="api-show-inherited" class="checkbox">
+    <input type="checkbox" id="api-show-inherited" checked="checked">
+    Inherited
+  </label>
+
+  <label for="api-show-protected" class="checkbox">
+    <input type="checkbox" id="api-show-protected" checked="checked">
+    Protected
+  </label>
+
+  <label for="api-show-private" class="checkbox">
+    <input type="checkbox" id="api-show-private" checked="checked">
+    Private
+  </label>
+  <label for="api-show-deprecated" class="checkbox">
+    <input type="checkbox" id="api-show-deprecated" checked="checked">
+    Deprecated
+  </label>
+
+</form>
+
+
+      <div class="apidocs">
+        <div id="docs-main">
+          <div class="content">
+            <div class="page-header">
+    <h1>src/singleton.js <small>File</small></h1>
+</div>
+
+<div class="file">
+    <pre class="prettyprint linenums">
+define(function (require, exports, module) {
+
+/**
+ * 类
+ * @module Class
+ */
+
+&#x27;use strict&#x27;;
+
+var $ = require(&#x27;$&#x27;),
+  Util = require(&#x27;util&#x27;),
+  Super = require(&#x27;./super&#x27;);
+
+/**
+ * 单例类
+ * @class Singleton
+ * @extends Super
+ * @param {Function} [Brood] 将要继承的父类（只继承其原型方法）
+ * @param {Object} [Proto] 将要扩展的实例方法集
+ * @return {function}
+ * @constructor
+ */
+var Singleton = function (/*[Brood][, Proto]*/) {
+
+  var args = arguments,
+    Dummy,
+    Proto,
+    Brood,
+
+    classInstance,
+    classPlugins = {};
+
+  switch (args.length) {
+    case 2:
+
+      if (typeof args[0] === &#x27;function&#x27;) {
+        Brood = args[0];
+      }
+
+      if ($.isPlainObject(args[1])) {
+        Proto = args[1];
+      }
+
+      break;
+    case 1:
+
+      if (typeof args[0] === &#x27;function&#x27;) {
+        Brood = args[0];
+      } else if ($.isPlainObject(args[0])) {
+        Proto = args[0];
+      }
+
+      break;
+  }
+
+  Dummy = function () {
+    if (classInstance) {
+      return classInstance;
+    }
+
+    classInstance = this;
+
+    var args = Array.prototype.slice.call(arguments, 0),
+
+      callparent = function (ctx, obj, prop) {
+        if (obj &amp;&amp; obj.hasOwnProperty(prop)){
+          // 递归执行callparent
+          callparent(ctx, obj.constructor.uber, prop);
+          obj[prop].apply(ctx, args);
+        }
+      };
+
+    // call parents&#x27; __construct
+    // &#x60;Child&#x27;s uber linked to Parent&#x27;s prototype&#x60;
+    callparent(this, Dummy.uber, &#x27;__construct&#x27;);
+
+    // call __construct
+    if (typeof this.__construct === &#x27;function&#x27;) {
+      this.__construct.apply(this, args);
+    }
+
+    // load __plugins
+    $.each(classPlugins, $.proxy(function (n, func) {
+      func.apply(this, args);
+    }, this));
+
+    // notify constructed, for plugins
+    // this.fire(&#x27;load&#x27;);
+  };
+
+  /**
+   * 为当前类添加插件
+   * @method addPlugins
+   * @static
+   * @param  {Object} plugins 插件
+   * @return {Function} 当前类
+   */
+  Dummy.addPlugins = function (plugins) {
+    $.extend(classPlugins, plugins);
+    return Dummy;
+  };
+
+  // make sure Classes inherited from Super or Super&#x27;s sub-classes
+  if (typeof Brood === &#x27;undefined&#x27;) {
+    Brood = Super;
+  } else if (!$.isPlainObject(Brood.uber) || Brood.uber._Super !== Util.guid) {
+    Super.inherit(Brood, Super);
+  }
+
+  Super.inherit(Dummy, Brood);
+
+  if (typeof Proto !== &#x27;undefined&#x27;) {
+    $.extend(Dummy.prototype, Proto);
+  }
+
+  return Dummy;
+};
+
+return Singleton;
+
+});
+
+    </pre>
+</div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="../assets/vendor/jquery/jquery.js"></script>
+<script src="../assets/vendor/bootstrap/js/bootstrap.js"></script>
+<script src="../assets/vendor/prettify/prettify.js"></script>
+<script src="../assets/js/yuidoc-bootstrap.js"></script>
+</body>
+</html>
