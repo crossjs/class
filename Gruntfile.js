@@ -1,8 +1,8 @@
 /*
- * modules
- * https://github.com/crossjs/modules
+ * class
+ * https://github.com/crossjs/class
  *
- * Copyright (c) 2013 crossjs
+ * Copyright (c) 2014 crossjs
  * Licensed under the MIT license.
  */
 
