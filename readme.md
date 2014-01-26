@@ -8,12 +8,12 @@
 
 ##how to require
 1. run `spm install crossjs/class`
-1. write `require('crossjs/class/VERSION.NUMBER/class')`
+1. write `require('crossjs/class/_VERSION.NUMBER_/class')`
 
 ##how to build
 1. checkout
 1. `npm install --save-dev`
-1. `spm install --save-dev`
+1. `spm install --save`
 1. `grunt`
 
 ##history
