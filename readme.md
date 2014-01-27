@@ -8,7 +8,7 @@
 
 ##how to require
 1. run `spm install crossjs/class`
-1. write `require('crossjs/class/_VERSION.NUMBER_/class')`
+1. write `require('crossjs/class/VERSION.NUMBER/class')`
 
 ##how to build
 1. checkout
@@ -18,5 +18,6 @@
 
 ##history
 
+- 0.0.3 - 子类不再重复执行`__construct`方法
 - 0.0.2 - 子类不再继承父类的插件（`plugins`）
 - 0.0.1 - init

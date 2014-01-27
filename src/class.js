@@ -67,7 +67,8 @@ var Class = function (/*[Brood][, Proto]*/) {
     callparent(this, Dummy.uber, '__construct');
 
     // call __construct
-    if (typeof this.__construct === 'function') {
+    if (Dummy.prototype.hasOwnProperty('__construct') &&
+        typeof this.__construct === 'function') {
       this.__construct.apply(this, args);
     }
 

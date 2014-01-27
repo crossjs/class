@@ -71,15 +71,19 @@ define(function (require, exports) {
 
   module('Module Plugins');
   test('ClassA.addPlugins(plugins)', function() {
-    var ClassA = new Class(),
+    var ClassA = new Class({
+      __construct: function () {
+        this.plugined = 1;
+      }
+    }),
       instanceA;
     ClassA.addPlugins({
         'test': function () {
-          this.plugined = true;
+          this.plugined++;
         }
       });
     instanceA = new ClassA();
-    equal( instanceA.plugined, true, '' );
+    equal( instanceA.plugined, 2, '' );
     equal( instanceA.another, undefined, '' );
   });
 
