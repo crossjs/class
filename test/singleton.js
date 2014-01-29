@@ -58,29 +58,57 @@ define(function (require, exports) {
         on: {
           'test': function () {
             T = this;
-            t = 'test' + Array.prototype.join.call(arguments, '');
+            t = Array.prototype.join.call(arguments, '');
           }
         }
       }),
       T = '',
       t = '';
     instanceA.fire('test', 1, 2, 3);
+    instanceA.off('test');
+    instanceA.fire('test', 4, 5, 6);
+    equal( T, instanceA, '' );
+    equal( t, 'test123', '' );
+  });
+  test('.fire(event)', function() {
+    var SingletonA = new Singleton({
+          __construct: function (e, f) {
+            this.on(e, f);
+          }
+        }),
+      instanceA = new SingletonA('test', function () {
+          T = this;
+          t = Array.prototype.join.call(arguments, '');
+        }),
+      T = '',
+      t = '';
+    instanceA.fire('test', 1, 2, 3);
+    instanceA.off('test');
+    instanceA.fire('test', 4, 5, 6);
     equal( T, instanceA, '' );
     equal( t, 'test123', '' );
   });
 
   module('Module Plugins');
   test('SingletonA.addPlugins(plugins)', function() {
-    var SingletonA = new Singleton(),
-      instanceA;
+    var SingletonA = new Singleton({
+      __construct: function () {
+        this.plugined = false;
+      }
+    }),
+      SingletonB,
+      instanceA,
+      instanceB;
     SingletonA.addPlugins({
         'test': function () {
           this.plugined = true;
         }
       });
     instanceA = new SingletonA();
-    equal( instanceA.plugined, true, '' );
-    equal( instanceA.another, undefined, '' );
+    SingletonB = new Singleton(SingletonA);
+    instanceB = new SingletonB();
+    equal( instanceA.plugined, true, '插件安装成功' );
+    equal( instanceB.plugined, false, '插件不会被继承' );
   });
 
 });

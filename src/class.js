@@ -8,7 +8,7 @@ define(function (require, exports, module) {
 'use strict';
 
 var $ = require('$'),
-  Util = require('util'),
+  // Util = require('util'),
   Super = require('./super');
 
 /**
@@ -94,15 +94,15 @@ var Class = function (/*[Brood][, Proto]*/) {
   };
 
   // make sure Classes inherited from Super or Super's sub-classes
-  if (typeof Brood === 'undefined') {
+  if (typeof Brood !== 'function') {
     Brood = Super;
-  } else if (!$.isPlainObject(Brood.uber) || Brood.uber._Super !== Util.guid) {
+  } else if (!$.isPlainObject(Brood.uber) || !Brood.uber.hasSuper) {
     Super.inherit(Brood, Super);
   }
 
   Super.inherit(Dummy, Brood);
 
-  if (typeof Proto !== 'undefined') {
+  if ($.isPlainObject(Proto)) {
     $.extend(Dummy.prototype, Proto);
   }
 

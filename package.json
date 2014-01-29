@@ -1,6 +1,6 @@
 {
   "name": "class",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "oo class, width event and extend",
   "keywords": [ "class", "seajs", "modules" ],
   "homepage": "https://github.com/crossjs/class",

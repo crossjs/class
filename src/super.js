@@ -22,7 +22,7 @@ var Super = function () {},
 
 Super.uber = Super.prototype = {
 
-  _Super: Util.guid,
+  hasSuper: true,
 
   /**
    * 构造函数
@@ -31,10 +31,8 @@ Super.uber = Super.prototype = {
   __construct: function (options) {
     this.__eventList = {};
     // 增加订阅
-    if ($.isPlainObject(options) && $.isPlainObject(options.on)) {
+    if (options && $.isPlainObject(options.on)) {
       this.on(options.on);
-      // 删除数据，避免多次订阅
-      // options.on = null;
     }
   },
 
@@ -43,21 +41,22 @@ Super.uber = Super.prototype = {
    * @method on
    * @param {String} event 事件名
    * @param {Function} callback 绑定回调函数
+   * @return {Object} 当前实例
    */
   on: function (event, callback) {
     var eventList = this.__eventList,
-      obj = {};
+      eventObject = {};
     if ($.isPlainObject(event)) {
-      obj = event;
+      eventObject = event;
     } else {
-      obj[event] = callback;
+      eventObject[event] = callback;
     }
-    $.each(obj, function (event, callback) {
-      if (Object.prototype.hasOwnProperty.call(eventList, event) && eventList[event]) {
+    $.each(eventObject, function (event, callback) {
+      if (eventList[event]) {
         // 判断唯一性，避免多次订阅
-        if ($.inArray(callback, eventList[event]) === -1) {
+        // if ($.inArray(callback, eventList[event]) === -1) {
           eventList[event].push(callback);
-        }
+        // }
       } else {
         eventList[event] = [callback];
       }
@@ -67,13 +66,14 @@ Super.uber = Super.prototype = {
 
   /**
    * 解除绑定的事件
+   * @method off
    * @param {String} event 事件名
    * @param {Function} callback 绑定回调函数
-   * @method off
+   * @return {Object} 当前实例
    */
   off: function (event, callback) {
     var eventList = this.__eventList;
-    if (Object.prototype.hasOwnProperty.call(eventList, event)) {
+    if (eventList[event]) {
       if (typeof callback === 'function') {
         $.each(eventList[event], function (i, n) {
           if (n === callback) {
@@ -89,35 +89,32 @@ Super.uber = Super.prototype = {
 
   /**
    * 触发绑定的事件
-   * @param {String} event 事件名
    * @method fire
+   * @param {String} event 事件名
+   * @return {Object} 当前实例
    */
   fire: function (event) {
     var eventList = this.__eventList,
-      args;
-    if (Object.prototype.hasOwnProperty.call(eventList, event)) {
-      args = [];
-      if (arguments.length > 1) {
-        args = Array.prototype.slice.call(arguments, 1);
-      }
-      $.each(eventList[event], $.proxy(function (i, callback) {
-        callback.apply(this, args);
-      }, this));
+      ctx = this,
+      args = arguments;
+    if (eventList[event]) {
+      $.each(eventList[event], function (i, callback) {
+        callback.apply(ctx, args);
+      });
     }
     return this;
   },
 
   /**
-   * 扩展实例方法，返回当前实例
+   * 扩展实例方法/属性
+   * @method extend
    * @param {Object} obj1 实例方法集
    * @param {Object} [objN] 实例方法集
-   * @return {object}
-   * @method extend
+   * @return {Object} 当前实例
    */
   extend: function (/*obj1[, objN]*/) {
-    var args = Array.prototype.slice.call(arguments, 0);
-    args.unshift(true, this);
-    $.extend.apply(null, args);
+    Array.prototype.unshift.call(arguments, true, this);
+    $.extend.apply(null, arguments);
     return this;
   }
 
@@ -131,7 +128,7 @@ Super.uber = Super.prototype = {
  * @static
  */
 Super.inherit = function (Child, Parent) {
-  // 不能使用`new Parent()`，因为可能引入非原型方法/属性
+  // 不使用`new Parent()`，以避免引入非原型方法/属性
   Bridge.prototype = Parent.prototype;
   Child.prototype = new Bridge();
   Child.uber = Parent.prototype;

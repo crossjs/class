@@ -58,13 +58,33 @@ define(function (require, exports) {
         on: {
           'test': function () {
             T = this;
-            t = 'test' + Array.prototype.join.call(arguments, '');
+            t = Array.prototype.join.call(arguments, '');
           }
         }
       }),
       T = '',
       t = '';
     instanceA.fire('test', 1, 2, 3);
+    instanceA.off('test');
+    instanceA.fire('test', 4, 5, 6);
+    equal( T, instanceA, '' );
+    equal( t, 'test123', '' );
+  });
+  test('.fire(event)', function() {
+    var ClassA = new Class({
+          __construct: function (e, f) {
+            this.on(e, f);
+          }
+        }),
+      instanceA = new ClassA('test', function () {
+          T = this;
+          t = Array.prototype.join.call(arguments, '');
+        }),
+      T = '',
+      t = '';
+    instanceA.fire('test', 1, 2, 3);
+    instanceA.off('test');
+    instanceA.fire('test', 4, 5, 6);
     equal( T, instanceA, '' );
     equal( t, 'test123', '' );
   });
@@ -73,18 +93,22 @@ define(function (require, exports) {
   test('ClassA.addPlugins(plugins)', function() {
     var ClassA = new Class({
       __construct: function () {
-        this.plugined = 1;
+        this.plugined = false;
       }
     }),
-      instanceA;
+      ClassB,
+      instanceA,
+      instanceB;
     ClassA.addPlugins({
         'test': function () {
-          this.plugined++;
+          this.plugined = true;
         }
       });
     instanceA = new ClassA();
-    equal( instanceA.plugined, 2, '' );
-    equal( instanceA.another, undefined, '' );
+    ClassB = new Class(ClassA);
+    instanceB = new ClassB();
+    equal( instanceA.plugined, true, '插件安装成功' );
+    equal( instanceB.plugined, false, '插件不会被继承' );
   });
 
 });
