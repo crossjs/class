@@ -7,8 +7,7 @@ define(function (require, exports, module) {
 
 'use strict';
 
-var $ = require('$'),
-  Util = require('util');
+var $ = require('$');
 
 /**
  * 超类
@@ -28,12 +27,8 @@ Super.uber = Super.prototype = {
    * 构造函数
    * @method __construct
    */
-  __construct: function (options) {
+  __construct: function () {
     this.__eventList = {};
-    // 增加订阅
-    if (options && $.isPlainObject(options.on)) {
-      this.on(options.on);
-    }
   },
 
   /**
@@ -53,10 +48,7 @@ Super.uber = Super.prototype = {
     }
     $.each(eventObject, function (event, callback) {
       if (eventList[event]) {
-        // 判断唯一性，避免多次订阅
-        // if ($.inArray(callback, eventList[event]) === -1) {
-          eventList[event].push(callback);
-        // }
+        eventList[event].push(callback);
       } else {
         eventList[event] = [callback];
       }

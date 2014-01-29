@@ -67,8 +67,8 @@ define(function (require, exports) {
     instanceA.fire('test', 1, 2, 3);
     instanceA.off('test');
     instanceA.fire('test', 4, 5, 6);
-    equal( T, instanceA, '' );
-    equal( t, 'test123', '' );
+    equal( T, '', '' );
+    equal( t, '', '' );
   });
   test('.fire(event)', function() {
     var ClassA = new Class({

@@ -1,6 +1,6 @@
 {
   "name": "class",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "oo class, width event and extend",
   "keywords": [ "class", "seajs", "modules" ],
   "homepage": "https://github.com/crossjs/class",
@@ -46,8 +46,7 @@
   "spm": {
     "output": [ "class.js", "singleton.js", "super.js" ],
     "alias": {
-      "$": "$",
-      "util": "crossjs/util/0.0.1/util"
+      "$": "$"
     }
   }
 }

@@ -8,7 +8,6 @@ define(function (require, exports, module) {
 'use strict';
 
 var $ = require('$'),
-  // Util = require('util'),
   Super = require('./super');
 
 /**

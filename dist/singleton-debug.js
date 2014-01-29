@@ -1,11 +1,10 @@
-define("crossjs/class/0.0.4/singleton-debug", [ "$-debug", "./super-debug", "crossjs/util/0.0.1/util-debug" ], function(require, exports, module) {
+define("crossjs/class/0.0.5/singleton-debug", [ "$-debug", "./super-debug" ], function(require, exports, module) {
     /**
  * 类
  * @module Class
  */
     "use strict";
-    var $ = require("$-debug"), // Util = require('util'),
-    Super = require("./super-debug");
+    var $ = require("$-debug"), Super = require("./super-debug");
     /**
  * 单例类
  * @class Singleton

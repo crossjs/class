@@ -1,10 +1,10 @@
-define("crossjs/class/0.0.4/super-debug", [ "$-debug", "crossjs/util/0.0.1/util-debug" ], function(require, exports, module) {
+define("crossjs/class/0.0.5/super-debug", [ "$-debug" ], function(require, exports, module) {
     /**
  * 类
  * @module Class
  */
     "use strict";
-    var $ = require("$-debug"), Util = require("crossjs/util/0.0.1/util-debug");
+    var $ = require("$-debug");
     /**
  * 超类
  * 实现了事件订阅与类继承
@@ -19,12 +19,8 @@ define("crossjs/class/0.0.4/super-debug", [ "$-debug", "crossjs/util/0.0.1/util-
    * 构造函数
    * @method __construct
    */
-        __construct: function(options) {
+        __construct: function() {
             this.__eventList = {};
-            // 增加订阅
-            if (options && $.isPlainObject(options.on)) {
-                this.on(options.on);
-            }
         },
         /**
    * 绑定事件，暂不支持命名空间
@@ -42,8 +38,6 @@ define("crossjs/class/0.0.4/super-debug", [ "$-debug", "crossjs/util/0.0.1/util-
             }
             $.each(eventObject, function(event, callback) {
                 if (eventList[event]) {
-                    // 判断唯一性，避免多次订阅
-                    // if ($.inArray(callback, eventList[event]) === -1) {
                     eventList[event].push(callback);
                 } else {
                     eventList[event] = [ callback ];
