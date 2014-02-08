@@ -1,4 +1,4 @@
-define("crossjs/class/0.0.5/singleton-debug", [ "$-debug", "./super-debug" ], function(require, exports, module) {
+define("crossjs/class/0.1.0/singleton-debug", [ "$-debug", "./super-debug" ], function(require, exports, module) {
     /**
  * 类
  * @module Class
