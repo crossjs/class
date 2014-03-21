@@ -7,103 +7,146 @@ define(function (require, exports, module) {
 
 'use strict';
 
-var $ = require('$'),
-  Super = require('./super');
+var $ = require('$');
+
+var inherit = function (Child, Parent) {
+  // 不使用`new Parent()`，以避免引入非原型方法/属性
+  var Bridge = function () {};
+  Bridge.prototype = Parent.prototype;
+  Child.prototype = new Bridge();
+  Child.superclass = Parent.prototype;
+  Child.prototype.constructor = Child;
+};
 
 /**
- * 标准类
+ * 类
+ *
+ * 提供简洁的 OO 实现
  * @class Class
- * @extends Super
- * @param {Function} [Brood] 将要继承的父类（只继承其原型方法）
- * @param {Object} [Proto] 将要扩展的实例方法集
- * @return {function}
- * @constructor
  */
-var Class = function (/*[Brood][, Proto]*/) {
+var Class = function () {};
 
-  var args = arguments,
-    Dummy,
-    Brood,
-    Proto,
-
-    classPlugins = {};
-
-  switch (args.length) {
-
-    case 2:
-      if (typeof args[0] === 'function') {
-        Brood = args[0];
-      }
-
-      if ($.isPlainObject(args[1])) {
-        Proto = args[1];
-      }
-
-      break;
-    case 1:
-      if (typeof args[0] === 'function') {
-        Brood = args[0];
-      } else if ($.isPlainObject(args[0])) {
-        Proto = args[0];
-      }
-
-      break;
-  }
-
-  Dummy = function () {
-    var args = Array.prototype.slice.call(arguments, 0),
-
-      callparent = function (ctx, obj, prop) {
-        if (obj && obj.hasOwnProperty(prop)){
-          // 递归执行callparent
-          callparent(ctx, obj.constructor.uber, prop);
-          obj[prop].apply(ctx, args);
-        }
-      };
-
-    // call parents' __construct
-    // `Child's uber linked to Parent's prototype`
-    callparent(this, Dummy.uber, '__construct');
-
-    // call __construct
-    if (Dummy.prototype.hasOwnProperty('__construct') &&
-        typeof this.__construct === 'function') {
-      this.__construct.apply(this, args);
-    }
-
-    // load __plugins
-    $.each(classPlugins, $.proxy(function (n, func) {
-      func.apply(this, args);
-    }, this));
-
-    // notify constructed, for plugins
-    // this.fire('load');
-  };
+Class.superclass = Class.prototype = {
 
   /**
-   * 为当前类添加插件
-   * @method addPlugins
-   * @static
-   * @param  {Object} plugins 插件
-   * @return {Function} 当前类
+   * 扩展实例方法/属性
+   * @example
+   * ```
+   * var Person = Class.create({
+   *   initialize: function (name, age) {
+   *     this.name = name;
+   *     this.age = age;
+   *   }
+   * });
+   * var bob = new Person('Bob', 13);
+   * bob.extend({
+   *   say: function () {
+   *     console.log('My name is ' + this.name + '.');
+   *     console.log('I\'m ' + this.age + ' years old.');
+   *   }
+   * });
+   * bob.say();
+   * // My name is Bob.
+   * // I'm 13 years old.
+   * ```
+   * @method extend
+   * @param {Object} obj1 实例方法集
+   * @param {Object} [objN] 实例方法集
+   * @return {Object} 类实例
    */
-  Dummy.addPlugins = function (plugins) {
-    $.extend(classPlugins, plugins);
-    return Dummy;
+  extend: function (/*obj1[, objN]*/) {
+    Array.prototype.unshift.call(arguments, true, this);
+    $.extend.apply(null, arguments);
+    return this;
+  }
+
+};
+
+/**
+ * 创建类
+ * @constructor
+ * @static
+ * @example
+ * ```
+ * var Person = Class.create({
+ *   initialize: function (name, age) {
+ *     this.name = name;
+ *     this.age = age;
+ *   }
+ * });
+ * var Student = Class.create(Person, {
+ *   initialize: function (name, age, school) {
+ *     Student.superclass.initialize.apply(this, arguments);
+ *     this.school = school;
+ *   }
+ * });
+ * var tom = new Student('Tom', 21, 'MIT');
+ * // now:
+ * // tom.name === 'Tom';
+ * // tom.age === 21;
+ * // tom.school === 'MIT';
+ * ```
+ * @method create
+ * @param {Function} [Brood] 将要继承的父类（只继承其原型方法）
+ * @param {Object} [Proto] 将要扩展的实例方法集
+ * @param {Object} [ProtoN] 将要扩展的实例方法集
+ * @return {Function} 类
+ */
+Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
+
+  var args = Array.prototype.slice.call(arguments, 0),
+    Dummy,
+    Brood;
+
+  Dummy = function () {
+    // 用于单例模式
+    if (Dummy.__instance) {
+      return Dummy.__instance;
+    }
+
+    // var args = Array.prototype.slice.call(arguments, 0),
+
+    //   callParent = function (ctx, obj, prop) {
+    //     if (obj && obj.hasOwnProperty(prop)){
+    //       // 递归执行callParent
+    //       callParent(ctx, obj.constructor.superclass, prop);
+    //       obj[prop].apply(ctx, args);
+    //     }
+    //   };
+
+    // // call parents' initialize
+    // // `Child's superclass linked to Parent's prototype`
+    // callParent(this, Dummy.superclass, 'initialize');
+
+    // call initialize
+    if (Dummy.prototype.hasOwnProperty('initialize') &&
+        typeof this.initialize === 'function') {
+      // this.initialize.apply(this, args);
+      this.initialize.apply(this, arguments);
+    }
   };
 
-  // make sure Classes inherited from Super or Super's sub-classes
-  if (typeof Brood !== 'function') {
-    Brood = Super;
-  } else if (!$.isPlainObject(Brood.uber) || !Brood.uber.hasSuper) {
-    Super.inherit(Brood, Super);
+  if (args[0] && typeof args[0] === 'function') {
+    Brood = args.shift();
+    // make sure Classes inherited from Class or Class's sub-classes
+    if (!Brood.superclass) {
+      inherit(Brood, Class);
+    }
+  } else {
+    Brood = Class;
   }
 
-  Super.inherit(Dummy, Brood);
+  inherit(Dummy, Brood);
 
-  if ($.isPlainObject(Proto)) {
-    $.extend(Dummy.prototype, Proto);
+  if (args.length) {
+    args.unshift(true, Dummy.prototype);
+    $.extend.apply(null, args);
   }
+
+  Dummy.extend = function () {
+    Array.prototype.unshift.call(arguments, Dummy);
+    return Class.create.apply(null, arguments);
+  };
 
   return Dummy;
 };

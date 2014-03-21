@@ -7,108 +7,122 @@ define(function (require, exports) {
   QUnit.start();
 
   module('Module Class');
-  test('new ClassA()', function() {
-    var ClassA = new Class();
+  test('Class', function() {
+    var ClassA = Class.create();
     notEqual( new ClassA(), new ClassA(), '' );
   });
 
   module('Module Construct');
-  test('new ClassA(arguments)', function() {
-    var ClassA = new Class({
-      __construct: function (x) {
+  test('Construct', function() {
+    var ClassA = Class.create({
+      initialize: function (x) {
         this.x = x;
       }
     });
     equal( new ClassA(2).x, 2, '' );
   });
 
-  module('Module Inherit');
-  test('new Class(ClassA)', function() {
-    var ClassA = new Class({
+  module('Module Singleton');
+  test('this.constructor.__instance', function() {
+    var ClassA = Class.create({
+      initialize: function (x) {
+        this.constructor.__instance = this;
+      }
+    });
+    equal( new ClassA(), new ClassA(), '' );
+  });
+  test('CLASSNAME.__instance', function() {
+    var ClassA = Class.create({
+      initialize: function (x) {
+        ClassA.__instance = this;
+      }
+    });
+    equal( new ClassA(), new ClassA(), '' );
+  });
+
+  module('Module Inherits');
+  test('Class.create(ClassA)', function() {
+    var ClassA = Class.create({
+        initialize: function () {
+          this.xy = this.x + this.y;
+        },
+        x: 1,
+        y: 2
+      });
+    var ClassB = Class.create(ClassA, {
+        initialize: function () {
+          ClassB.superclass.initialize.apply(this, arguments);
+          this.xyz = this.x + this.y + this.z;
+        },
+        x: 3,
+        z: 4
+      });
+    var ClassC = Class.create(ClassB, {
+        initialize: function () {
+          ClassC.superclass.initialize.apply(this, arguments);
+          this.xyzk = this.x + this.y + this.z + this.k;
+        },
+        k: 5
+      });
+    var instanceA = new ClassA();
+    var instanceB = new ClassB();
+    var instanceC = new ClassC();
+    equal( instanceA.xy, 3, '' );
+    equal( instanceB.xy, 5, '' );
+    equal( instanceB.xyz, 9, '' );
+    equal( instanceC.xy, 5, '' );
+    equal( instanceC.xyz, 9, '' );
+    equal( instanceC.xyzk, 14, '' );
+  });
+  test('ClassA.extend({})', function() {
+    var ClassA = Class.create({
+        initialize: function () {
+          this.xy = this.x + this.y;
+        },
         x: 1,
         y: 2
       }),
-      ClassB = new Class(ClassA, {
+      ClassB = ClassA.extend({
+        initialize: function () {
+          ClassB.superclass.initialize.apply(this, arguments);
+          this.xyz = this.x + this.y + this.z;
+        },
         x: 3,
         z: 4
       }),
+      ClassC = ClassB.extend({
+        initialize: function () {
+          ClassC.superclass.initialize.apply(this, arguments);
+          this.xyzk = this.x + this.y + this.z + this.k;
+        },
+        k: 5
+      }),
       instanceA = new ClassA(),
-      instanceB = new ClassB();
+      instanceB = new ClassB(),
+      instanceC = new ClassC();
     equal( instanceA.x, 1, '' );
+    equal( instanceA.y, 2, '' );
+    equal( instanceA.xy, 3, '' );
     equal( instanceB.x, 3, '' );
-    equal( instanceA.y, instanceB.y, '' );
     equal( instanceB.y, 2, '' );
-    equal( instanceA.z, undefined, '' );
     equal( instanceB.z, 4, '' );
+    equal( instanceB.xy, 5, '' );
+    equal( instanceB.xyz, 9, '' );
+    equal( instanceC.x, 3, '' );
+    equal( instanceC.y, 2, '' );
+    equal( instanceC.z, 4, '' );
+    equal( instanceC.xy, 5, '' );
+    equal( instanceC.xyz, 9, '' );
+    equal( instanceC.xyzk, 14, '' );
   });
 
   module('Module Extend');
   test('.extend(PlainObjectA, ..., PlainObjectN)', function() {
-    var ClassA = new Class(),
+    var ClassA = Class.create(),
       instanceA = new ClassA();
     instanceA.extend({ x: 1, y: 2 }, { x: 3 });
     equal( instanceA.x, 3, '' );
     equal( instanceA.y, 2, '' );
-  });
-
-  module('Module Event');
-  test('.fire(event)', function() {
-    var ClassA = new Class(),
-      instanceA = new ClassA({
-        on: {
-          'test': function () {
-            T = this;
-            t = Array.prototype.join.call(arguments, '');
-          }
-        }
-      }),
-      T = '',
-      t = '';
-    instanceA.fire('test', 1, 2, 3);
-    instanceA.off('test');
-    instanceA.fire('test', 4, 5, 6);
-    equal( T, '', '' );
-    equal( t, '', '' );
-  });
-  test('.fire(event)', function() {
-    var ClassA = new Class({
-          __construct: function (e, f) {
-            this.on(e, f);
-          }
-        }),
-      instanceA = new ClassA('test', function () {
-          T = this;
-          t = Array.prototype.join.call(arguments, '');
-        }),
-      T = '',
-      t = '';
-    instanceA.fire('test', 1, 2, 3);
-    instanceA.off('test');
-    instanceA.fire('test', 4, 5, 6);
-    equal( T, instanceA, '' );
-    equal( t, 'test123', '' );
-  });
-
-  module('Module Plugins');
-  test('ClassA.addPlugins(plugins)', function() {
-    var ClassA = new Class({
-      __construct: function () {
-        this.plugined = false;
-      }
-    }),
-      ClassB,
-      instanceA,
-      instanceB;
-    ClassA.addPlugins({
-        'test': function () {
-          this.plugined = true;
-        }
-      });
-    instanceA = new ClassA();
-    ClassB = new Class(ClassA);
-    instanceB = new ClassB();
-    equal( instanceA.plugined, true, '插件安装成功' );
-    equal( instanceB.plugined, false, '插件不会被继承' );
   });
 
 });

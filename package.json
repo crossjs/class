@@ -1,7 +1,7 @@
 {
   "name": "class",
-  "version": "0.1.0",
-  "description": "oo class, width event and extend",
+  "version": "1.0.0",
+  "description": "oo class, with inheritance and extension",
   "keywords": [ "class", "seajs", "modules" ],
   "homepage": "https://github.com/crossjs/class",
   "bugs": {
@@ -35,16 +35,16 @@
     "grunt-contrib-clean": "*",
     "grunt-contrib-copy": "*",
     "grunt-contrib-jshint": "*",
-    "grunt-contrib-qunit": "*",
     "grunt-contrib-uglify": "*",
     "grunt-contrib-yuidoc": "*",
     "grunt-cmd-transport": "*",
     "grunt-cmd-concat": "*",
+    "grunt-qunit-istanbul": "*",
     "matchdep": "*"
   },
-  "family": "crossjs",
+  "family": "pandora",
   "spm": {
-    "output": [ "class.js", "singleton.js", "super.js" ],
+    "output": [ "class.js" ],
     "alias": {
       "$": "$"
     }
