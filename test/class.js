@@ -22,23 +22,23 @@ define(function (require, exports) {
     equal( new ClassA(2).x, 2, '' );
   });
 
-  module('Module Singleton');
-  test('this.constructor.__instance', function() {
-    var ClassA = Class.create({
-      initialize: function (x) {
-        this.constructor.__instance = this;
-      }
-    });
-    equal( new ClassA(), new ClassA(), '' );
-  });
-  test('CLASSNAME.__instance', function() {
-    var ClassA = Class.create({
-      initialize: function (x) {
-        ClassA.__instance = this;
-      }
-    });
-    equal( new ClassA(), new ClassA(), '' );
-  });
+  // module('Module Singleton');
+  // test('this.constructor.__instance', function() {
+  //   var ClassA = Class.create({
+  //     initialize: function (x) {
+  //       this.constructor.__instance = this;
+  //     }
+  //   });
+  //   equal( new ClassA(), new ClassA(), '' );
+  // });
+  // test('CLASSNAME.__instance', function() {
+  //   var ClassA = Class.create({
+  //     initialize: function (x) {
+  //       ClassA.__instance = this;
+  //     }
+  //   });
+  //   equal( new ClassA(), new ClassA(), '' );
+  // });
 
   module('Module Inherits');
   test('Class.create(ClassA)', function() {

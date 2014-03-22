@@ -29,6 +29,12 @@ var Class = function () {};
 Class.superclass = Class.prototype = {
 
   /**
+   * 初始化函数
+   * @method initialize
+   */
+  initialize: function () { },
+
+  /**
    * 扩展实例方法/属性
    * @example
    * ```
@@ -99,31 +105,7 @@ Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
     Brood;
 
   Dummy = function () {
-    // 用于单例模式
-    if (Dummy.__instance) {
-      return Dummy.__instance;
-    }
-
-    // var args = Array.prototype.slice.call(arguments, 0),
-
-    //   callParent = function (ctx, obj, prop) {
-    //     if (obj && obj.hasOwnProperty(prop)){
-    //       // 递归执行callParent
-    //       callParent(ctx, obj.constructor.superclass, prop);
-    //       obj[prop].apply(ctx, args);
-    //     }
-    //   };
-
-    // // call parents' initialize
-    // // `Child's superclass linked to Parent's prototype`
-    // callParent(this, Dummy.superclass, 'initialize');
-
-    // call initialize
-    if (Dummy.prototype.hasOwnProperty('initialize') &&
-        typeof this.initialize === 'function') {
-      // this.initialize.apply(this, args);
-      this.initialize.apply(this, arguments);
-    }
+    this.initialize.apply(this, arguments);
   };
 
   if (args[0] && typeof args[0] === 'function') {
@@ -151,6 +133,6 @@ Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
   return Dummy;
 };
 
-return Class;
+module.exports = Class;
 
 });
