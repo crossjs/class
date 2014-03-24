@@ -6,14 +6,16 @@ define(function (require, exports) {
 
   QUnit.start();
 
-  module('Module Class');
-  test('Class', function() {
+  test('class', function() {
+    notEqual( new Class(), new Class(), '' );
+  });
+
+  test('new', function() {
     var ClassA = Class.create();
     notEqual( new ClassA(), new ClassA(), '' );
   });
 
-  module('Module Construct');
-  test('Construct', function() {
+  test('initialize', function() {
     var ClassA = Class.create({
       initialize: function (x) {
         this.x = x;
@@ -22,27 +24,16 @@ define(function (require, exports) {
     equal( new ClassA(2).x, 2, '' );
   });
 
-  // module('Module Singleton');
-  // test('this.constructor.__instance', function() {
-  //   var ClassA = Class.create({
-  //     initialize: function (x) {
-  //       this.constructor.__instance = this;
-  //     }
-  //   });
-  //   equal( new ClassA(), new ClassA(), '' );
-  // });
-  // test('CLASSNAME.__instance', function() {
-  //   var ClassA = Class.create({
-  //     initialize: function (x) {
-  //       ClassA.__instance = this;
-  //     }
-  //   });
-  //   equal( new ClassA(), new ClassA(), '' );
-  // });
+  test('extend', function() {
+    var ClassA = Class.create(),
+      instanceA = new ClassA();
+    instanceA.extend({ x: 1, y: 2 }, { x: 3 });
+    equal( instanceA.x, 3, '' );
+    equal( instanceA.y, 2, '' );
+  });
 
-  module('Module Inherits');
-  test('Class.create(ClassA)', function() {
-    var ClassA = Class.create({
+  test('Class.create', function() {
+    var ClassA = Class.create(function () {}, {
         initialize: function () {
           this.xy = this.x + this.y;
         },
@@ -74,7 +65,8 @@ define(function (require, exports) {
     equal( instanceC.xyz, 9, '' );
     equal( instanceC.xyzk, 14, '' );
   });
-  test('ClassA.extend({})', function() {
+
+  test('Class.extend', function() {
     var ClassA = Class.create({
         initialize: function () {
           this.xy = this.x + this.y;
@@ -114,15 +106,6 @@ define(function (require, exports) {
     equal( instanceC.xy, 5, '' );
     equal( instanceC.xyz, 9, '' );
     equal( instanceC.xyzk, 14, '' );
-  });
-
-  module('Module Extend');
-  test('.extend(PlainObjectA, ..., PlainObjectN)', function() {
-    var ClassA = Class.create(),
-      instanceA = new ClassA();
-    instanceA.extend({ x: 1, y: 2 }, { x: 3 });
-    equal( instanceA.x, 3, '' );
-    equal( instanceA.y, 2, '' );
   });
 
 });
