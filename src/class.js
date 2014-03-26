@@ -61,7 +61,7 @@ Class.superclass = Class.prototype = {
    * @return {Object} 类实例
    */
   extend: function (/*obj1[, objN]*/) {
-    Array.prototype.unshift.call(arguments, true, this);
+    Array.prototype.unshift.call(arguments, this);
     $.extend.apply(null, arguments);
     return this;
   }
@@ -121,7 +121,7 @@ Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
   inherit(Dummy, Brood);
 
   if (args.length) {
-    args.unshift(true, Dummy.prototype);
+    args.unshift(Dummy.prototype);
     $.extend.apply(null, args);
   }
 

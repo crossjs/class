@@ -108,4 +108,40 @@ define(function (require, exports) {
     equal( instanceC.xyzk, 14, '' );
   });
 
+  test('Class.extend', function() {
+    var ClassA = Class.create({
+        initialize: function () {
+          this.setup();
+        },
+        setup: function () {
+        }
+      }),
+      ClassC = ClassA.extend({
+        defaults: {
+          z: 5
+        },
+        setup: function () {
+          var
+            defaults = {
+                x: 3,
+                y: 4
+              },
+            ClassB = ClassA.extend({
+              defaults: defaults,
+              setup: function () {
+                deepEqual( this.defaults, {
+                    x: 3,
+                    y: 4
+                  }, '' );
+              }
+            });
+          new ClassB();
+          deepEqual( this.defaults, {
+              z: 5
+            }, '' );
+        }
+      });
+      new ClassC();
+  });
+
 });
