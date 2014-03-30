@@ -125,7 +125,36 @@ Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
     $.extend.apply(null, args);
   }
 
-  Dummy.extend = function () {
+
+  /**
+   * 扩展类
+   * @static
+   * @example
+   * ```
+   * var Person = Class.create({
+   *   initialize: function (name, age) {
+   *     this.name = name;
+   *     this.age = age;
+   *   }
+   * });
+   * var Student = Person.extend({
+   *   initialize: function (name, age, school) {
+   *     Student.superclass.initialize.apply(this, arguments);
+   *     this.school = school;
+   *   }
+   * });
+   * var tom = new Student('Tom', 21, 'MIT');
+   * // now:
+   * // tom.name === 'Tom';
+   * // tom.age === 21;
+   * // tom.school === 'MIT';
+   * ```
+   * @method extend
+   * @param {Object} [Proto] 将要扩展的实例方法集
+   * @param {Object} [ProtoN] 将要扩展的实例方法集
+   * @return {Function} 类
+   */
+ Dummy.extend = function (/*[Proto[, ProtoN]]*/) {
     Array.prototype.unshift.call(arguments, Dummy);
     return Class.create.apply(null, arguments);
   };
