@@ -124,6 +124,37 @@
             },
             "class": "Class",
             "module": "Class"
+        },
+        {
+            "file": "src\\class.js",
+            "line": 129,
+            "description": "扩展类",
+            "static": 1,
+            "example": [
+                "\n```\nvar Person = Class.create({\n  initialize: function (name, age) {\n    this.name = name;\n    this.age = age;\n  }\n});\nvar Student = Person.extend({\n  initialize: function (name, age, school) {\n    Student.superclass.initialize.apply(this, arguments);\n    this.school = school;\n  }\n});\nvar tom = new Student('Tom', 21, 'MIT');\n// now:\n// tom.name === 'Tom';\n// tom.age === 21;\n// tom.school === 'MIT';\n```"
+            ],
+            "itemtype": "method",
+            "name": "extend",
+            "params": [
+                {
+                    "name": "Proto",
+                    "description": "将要扩展的实例方法集",
+                    "type": "Object",
+                    "optional": true
+                },
+                {
+                    "name": "ProtoN",
+                    "description": "将要扩展的实例方法集",
+                    "type": "Object",
+                    "optional": true
+                }
+            ],
+            "return": {
+                "description": "类",
+                "type": "Function"
+            },
+            "class": "Class",
+            "module": "Class"
         }
     ],
     "warnings": []
