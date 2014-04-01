@@ -1,23 +1,21 @@
 #class
 
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/crossjs/class/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 [![Build Status](https://api.travis-ci.org/crossjs/class.png?branch=master)](http://travis-ci.org/crossjs/class)
 [![Coverage Status](https://coveralls.io/repos/crossjs/class/badge.png?branch=master)](https://coveralls.io/r/crossjs/class?branch=master)
-[![Built with Grunt](https://cdn.gruntjs.com/builtwith.png)](http://gruntjs.com/)
 
- > seajs module
+ > oo class, seajs module
 
-##how to require
+##how to demo
+
+1. checkout
+1. run `npm install`
+1. run `grunt`
+1. view files in `/demo`
+
+##how to use
 
 1. run `spm install pandora/class`
 1. write `require('pandora/class/VERSION.NUMBER/class')`
-
-##how to build
-
-1. checkout
-1. `npm install --save-dev`
-1. `spm install --save`
-1. `grunt`
 
 ##history
 

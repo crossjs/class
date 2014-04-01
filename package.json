@@ -1,7 +1,7 @@
 {
   "name": "class",
   "version": "1.0.0",
-  "description": "oo class, with inheritance and extension",
+  "description": "oo class",
   "keywords": [ "class", "seajs", "modules" ],
   "homepage": "https://github.com/crossjs/class",
   "bugs": {

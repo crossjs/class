@@ -24,11 +24,12 @@
         ['/sea-modules/jquery', '/vendor/jquery/jquery']
       ],
       'alias': {
-        '$': 'jquery'
+        '$': 'jquery',
+        'class': 'pandora/class/1.0.0/class'
       }
     });
 
-    seajs.use(['../src/class'], function (Class) {
+    seajs.use(['class'], function (Class) {
 
       'use strict';
 
