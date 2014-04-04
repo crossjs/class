@@ -5,8 +5,8 @@
         "version": "1.0.0"
     },
     "files": {
-        "src/class.js": {
-            "name": "src/class.js",
+        "src\\class.js": {
+            "name": "src\\class.js",
             "modules": {
                 "Class": 1
             },
@@ -27,7 +27,7 @@
             "fors": {},
             "namespaces": {},
             "tag": "module",
-            "file": "src/class.js",
+            "file": "src\\class.js",
             "line": 21,
             "description": "类"
         }
@@ -43,14 +43,14 @@
             "extension_for": [],
             "module": "Class",
             "namespace": "",
-            "file": "src/class.js",
+            "file": "src\\class.js",
             "line": 21,
             "description": "类\n\n提供简洁的 OO 实现"
         }
     },
     "classitems": [
         {
-            "file": "src/class.js",
+            "file": "src\\class.js",
             "line": 31,
             "description": "初始化函数",
             "itemtype": "method",
@@ -59,7 +59,7 @@
             "module": "Class"
         },
         {
-            "file": "src/class.js",
+            "file": "src\\class.js",
             "line": 37,
             "description": "扩展实例方法/属性",
             "example": [
@@ -88,7 +88,7 @@
             "module": "Class"
         },
         {
-            "file": "src/class.js",
+            "file": "src\\class.js",
             "line": 71,
             "description": "创建类",
             "is_constructor": 1,
@@ -126,7 +126,7 @@
             "module": "Class"
         },
         {
-            "file": "src/class.js",
+            "file": "src\\class.js",
             "line": 129,
             "description": "扩展类",
             "static": 1,
