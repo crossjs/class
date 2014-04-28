@@ -1,7 +1,7 @@
 #class
 
-[![Build Status](https://api.travis-ci.org/crossjs/class.png?branch=master)](http://travis-ci.org/crossjs/class)
-[![Coverage Status](https://coveralls.io/repos/crossjs/class/badge.png?branch=master)](https://coveralls.io/r/crossjs/class?branch=master)
+[![Build Status](https://api.travis-ci.org/pandorajs/class.png?branch=master)](http://travis-ci.org/pandorajs/class)
+[![Coverage Status](https://coveralls.io/repos/pandorajs/class/badge.png?branch=master)](https://coveralls.io/r/pandorajs/class?branch=master)
 
  > oo class, seajs module
 
@@ -16,6 +16,10 @@
 
 1. run `spm install pandora/class`
 1. write `require('pandora/class/VERSION.NUMBER/class')`
+
+#find examples
+
+1. view the source files in '/src'
 
 ##history
 
