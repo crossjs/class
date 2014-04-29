@@ -17,7 +17,7 @@
 1. run `spm install pandora/class`
 1. write `require('pandora/class/VERSION.NUMBER/class')`
 
-#find examples
+##find examples
 
 1. view the source files in '/src'
 
