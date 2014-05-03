@@ -1,8 +1,8 @@
 /*
  * class
- * https://github.com/crossjs/class
+ * https://github.com/pandorajs/class
  *
- * Copyright (c) 2014 crossjs
+ * Copyright (c) 2014 pandorajs
  * Licensed under the MIT license.
  */
 
