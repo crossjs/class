@@ -114,7 +114,7 @@ module.exports = function(grunt) {
       options: {
         debug: true,
         idleading: '<%= idleading %>',
-        alias: '<%= pkg.spm.alias %>'
+        alias: '<%= pkg.spm.dependencies %>'
       },
       dist: {
         files: [{

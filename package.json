@@ -3,14 +3,14 @@
   "version": "1.0.0",
   "description": "oo class",
   "keywords": [ "class", "seajs", "modules" ],
-  "homepage": "https://github.com/crossjs/class",
+  "homepage": "https://github.com/pandorajs/class",
   "bugs": {
-    "url": "https://github.com/crossjs/class/issues"
+    "url": "https://github.com/pandorajs/class/issues"
   },
   "licenses": [
     {
       "type": "MIT",
-      "url": "https://github.com/crossjs/class/blob/master/LICENSE-MIT"
+      "url": "https://github.com/pandorajs/class/blob/master/LICENSE-MIT"
     }
   ],
   "author": {
@@ -20,7 +20,7 @@
   "main": "Gruntfile.js",
   "repository": {
     "type": "git",
-    "url": "git://github.com/crossjs/class.git"
+    "url": "git://github.com/pandorajs/class.git"
   },
   "scripts": {
     "test": "grunt qunit"
@@ -43,11 +43,14 @@
     "grunt-qunit-istanbul": "*",
     "matchdep": "*"
   },
-  "family": "pandora",
   "spm": {
-    "output": [ "class.js" ],
-    "alias": {
+    "main": "src/class.js",
+    "dependencies": {
       "$": "$"
-    }
+    },
+    "engines": {
+      "seajs": "2.2.1"
+    },
+    "tests": "test/*.html"
   }
 }
