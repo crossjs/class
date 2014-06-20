@@ -8,8 +8,6 @@ define(function (require, exports, module) {
 
 'use strict';
 
-var $ = require('$');
-
 var inherit = function (Child, Parent) {
   // 不使用`new Parent()`，以避免引入非原型方法/属性
   var Bridge = function () {};
@@ -17,6 +15,23 @@ var inherit = function (Child, Parent) {
   Child.prototype = new Bridge();
   Child.superclass = Parent.prototype;
   Child.prototype.constructor = Child;
+};
+
+var mixin = function () {
+  var args = Array.prototype.slice.call(arguments, 0),
+    target = args.shift(),
+    source, p;
+
+  while ((source = args.shift())) {
+    for (p in source) {
+      if (p === 'mixins') {
+        source[p].unshift(target);
+        mixin.apply(null, source[p]);
+      } else {
+        target[p] = source[p];
+      }
+    }
+  }
 };
 
 /**
@@ -61,7 +76,8 @@ Class.superclass = Class.prototype = {
    */
   extend: function (/*obj1[, objN]*/) {
     Array.prototype.unshift.call(arguments, this);
-    $.extend.apply(null, arguments);
+
+    mixin.apply(null, arguments);
     return this;
   }
 
@@ -135,9 +151,8 @@ Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
 
   if (args.length) {
     args.unshift(Dummy.prototype);
-    $.extend.apply(null, args);
+    mixin.apply(null, args);
   }
-
 
   /**
    * 扩展类
@@ -160,7 +175,7 @@ Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
    * });
    * ```
    */
- Dummy.extend = function (/*[Proto[, ProtoN]]*/) {
+  Dummy.extend = function (/*[Proto[, ProtoN]]*/) {
     Array.prototype.unshift.call(arguments, Dummy);
     return Class.create.apply(null, arguments);
   };

@@ -47,7 +47,6 @@
   "spm": {
     "output": [ "class.js" ],
     "alias": {
-      "$": "$"
     }
   }
 }
