@@ -43,10 +43,15 @@
     "grunt-qunit-istanbul": "*",
     "matchdep": "*"
   },
-  "family": "pandora",
   "spm": {
-    "output": [ "class.js" ],
-    "alias": {
-    }
+    "main": "class.js",
+    "dependencies": {
+    },
+    "devDenpendencies": {
+    },
+    "engines": {
+      "seajs": "2.2.1"
+    },
+    "tests": "test/*.html"
   }
 }
