@@ -17,13 +17,17 @@ var inherit = function (Child, Parent) {
   Child.prototype.constructor = Child;
 };
 
+var slice = Array.prototype.slice,
+    unshift = Array.prototype.unshift;
+
 var mixin = function () {
-  var args = Array.prototype.slice.call(arguments, 0),
+  var args = slice.call(arguments, 0),
     target = args.shift(),
     source, p;
 
   while ((source = args.shift())) {
     for (p in source) {
+      // 保留属性 mixins
       if (p === 'mixins') {
         source[p].unshift(target);
         mixin.apply(null, source[p]);
@@ -41,46 +45,44 @@ var mixin = function () {
  */
 var Class = function () {};
 
-Class.superclass = Class.prototype = {
+Class.superclass = Class.prototype;
 
-  /**
-   * 初始化方法，实例化时自动执行
-   *
-   * @method initialize
-   */
-  initialize: function () { },
+/**
+ * 初始化方法，实例化时自动执行
+ *
+ * @method initialize
+ */
+Class.prototype.initialize = function () { };
 
-  /**
-   * 扩展实例方法/属性
+/**
+ * 扩展实例方法/属性
 
-   * @method extend
-   * @param {Object} obj1 实例方法集
-   * @param {Object} [objN] 实例方法集
-   * @return {Object} 类实例
-   *
-   * @example
-   * ```
-   * var bob = new Person('Bob', 13);
-   *
-   * bob.extend({
-   *   say: function () {
-   *     console.log('My name is ' + this.name + '.');
-   *     console.log('I\'m ' + this.age + ' years old.');
-   *   }
-   * });
-   *
-   * bob.say();
-   * // My name is Bob.
-   * // I'm 13 years old.
-   * ```
-   */
-  extend: function (/*obj1[, objN]*/) {
-    Array.prototype.unshift.call(arguments, this);
+ * @method extend
+ * @param {Object} obj1 实例方法集
+ * @param {Object} [objN] 实例方法集
+ * @return {Object} 类实例
+ *
+ * @example
+ * ```
+ * var bob = new Person('Bob', 13);
+ *
+ * bob.extend({
+ *   say: function () {
+ *     console.log('My name is ' + this.name + '.');
+ *     console.log('I\'m ' + this.age + ' years old.');
+ *   }
+ * });
+ *
+ * bob.say();
+ * // My name is Bob.
+ * // I'm 13 years old.
+ * ```
+ */
+Class.prototype.extend = function (/*obj1[, objN]*/) {
+  Array.prototype.unshift.call(arguments, this);
 
-    mixin.apply(null, arguments);
-    return this;
-  }
-
+  mixin.apply(null, arguments);
+  return this;
 };
 
 /**
@@ -129,7 +131,7 @@ Class.superclass = Class.prototype = {
  */
 Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
 
-  var args = Array.prototype.slice.call(arguments, 0),
+  var args = slice.call(arguments, 0),
     Dummy,
     Brood;
 
@@ -176,7 +178,7 @@ Class.create = function (/*[Brood][, Proto[, ProtoN]]*/) {
    * ```
    */
   Dummy.extend = function (/*[Proto[, ProtoN]]*/) {
-    Array.prototype.unshift.call(arguments, Dummy);
+    unshift.call(arguments, Dummy);
     return Class.create.apply(null, arguments);
   };
 
