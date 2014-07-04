@@ -35,18 +35,16 @@
       test('instanceof', function() {
         var ClassA = Class.create();
         var ClassB = ClassA.extend({});
-        ok( new Class instanceof Class &&
-            new ClassA instanceof Class &&
+        ok( new ClassA instanceof Class &&
             new ClassB instanceof Class &&
             new ClassB instanceof ClassA,
-            'instance is a instance of Class and panret class' );
+            'instance is a instance of Class and parent class' );
       });
 
       test('constructor', function() {
         var ClassA = Class.create();
         var ClassB = ClassA.extend({});
-        ok( (new Class).constructor === Class &&
-            (new ClassA).constructor === ClassA &&
+        ok( (new ClassA).constructor === ClassA &&
             (new ClassB).constructor === ClassB,
             'constructor of a instance is the direct class' );
       });
