@@ -1,26 +1,82 @@
-#class
+# pandora-class [![spm version](http://127.0.0.1:3000/badge/pandora-class)](http://127.0.0.1:3000/package/pandora-class)
 
-[![Build Status](https://api.travis-ci.org/pandorajs/class.png?branch=master)](http://travis-ci.org/pandorajs/class)
-[![Coverage Status](https://coveralls.io/repos/pandorajs/class/badge.png?branch=master)](https://coveralls.io/r/pandorajs/class?branch=master)
+---
 
- > oo class, seajs module
 
-##how to demo
 
-1. checkout
-1. run `npm install`
-1. run `grunt`
-1. view files in `/demo`
+## 安装
 
-##how to use
+```
+$ spm install pandora-class --save
+```
 
-1. run `spm install pandora/class`
-1. write `require('pandora/class/VERSION.NUMBER/class')`
+## 使用说明
 
-##find examples
+###创建类
+```js
+var Class = require('pandora-class');
+var Person = Class.create({
+  initialize: function (name, age) {
+    this.name = name;
+    this.age = age;
+  }
+});
 
-1. view the source files in '/src'
+```
+###对类扩展（继承）
+```js
+var Student = Person.extend({
+  //initialize是内置的初始化方法，实例化时自动执行
+  initialize: function (name, age, school) {
+    Student.superclass.initialize.apply(this, arguments);
+	//superclass是Student的父类，也就是Person，这句是调用父类的初始化方法。
+    this.school = school;
+  }
+});
 
-##history
+```  
+或
+```js
+var Student = Class.create(Person, {
+ initialize: function (name, age, school) {
+    Student.superclass.initialize.apply(this, arguments);
+    this.school = school;
+  }
+});
 
-- 1.0.0 - release
+``` 
+###对实例扩展  
+```js
+var person = new Person('xiaoming', 18);
+person.extend({
+  showName: function () {
+    console.log(this.name);
+  }
+});
+person.showName(); //xiaoming
+``` 
+
+###混入
+```js
+var proto1 = {
+    height: 175
+  },
+  proto2 = {
+    getHeight: function() {
+      return this.height;
+    }
+  };
+```
+然后通过以下方式把属性或方法混入到类里。
+```js
+var Student = Person.extend({
+  mixins: [proto1, proto2]
+});
+```
+或
+```js
+var Student = Class.create(Person,{
+  mixins: [proto1, proto2]
+});
+```
+混入后，Student就拥有height属性和getHeight()方法。
