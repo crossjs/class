@@ -1,4 +1,4 @@
-# pandora-class [![spm version](http://127.0.0.1:3000/badge/pandora-class)](http://127.0.0.1:3000/package/pandora-class)
+# pandora-class
 
 ---
 
