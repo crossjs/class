@@ -1,52 +1,37 @@
 {
-  "name": "class",
-  "version": "1.0.0",
-  "description": "oo class",
-  "keywords": [ "class", "seajs", "modules" ],
+  "name": "pandora-class",
+  "version": "1.1.0",
+  "description": "提供简单的 OO 实现",
+  "keywords": ["pandora","class"],
   "homepage": "https://github.com/pandorajs/class",
-  "bugs": {
-    "url": "https://github.com/pandorajs/class/issues"
-  },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://github.com/pandorajs/class/blob/master/LICENSE-MIT"
-    }
-  ],
   "author": {
-    "name": "crossjs",
-    "url": "https://github.com/crossjs"
+    "name": "pandorajs",
+    "url": "https://github.com/pandorajs"
   },
-  "main": "Gruntfile.js",
+  "owners" : [{
+    "name" : "pandorajs"
+  }],
   "repository": {
     "type": "git",
     "url": "git://github.com/pandorajs/class.git"
   },
-  "scripts": {
-    "test": "grunt qunit"
+  "bugs": {
+    "url": "https://github.com/pandorajs/article/class"
   },
-  "engines": {
-    "node": ">= 0.8.0"
-  },
-  "dependencies": {
+  "licenses": "MIT",
+  "spm": {
+    "main": "class.js",
+    "dependencies": {
+    },
+    "devDependencies": {
+      "expect.js": "0.3.1"
+    }
   },
   "devDependencies": {
-    "grunt": "*",
-    "grunt-cmd-transport": "*",
-    "grunt-cmd-concat": "*",
-    "grunt-contrib-clean": "*",
-    "grunt-contrib-copy": "*",
-    "grunt-contrib-jshint": "*",
-    "grunt-contrib-uglify": "*",
-    "grunt-contrib-yuidoc": "*",
-    "grunt-coveralls": "*",
-    "grunt-qunit-istanbul": "*",
-    "matchdep": "*"
+    "spm": "3"
   },
-  "family": "pandora",
-  "spm": {
-    "output": [ "class.js" ],
-    "alias": {
-    }
+  "scripts": {
+    "test": "spm test",
+    "build": "spm build"
   }
 }
